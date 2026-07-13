@@ -1103,83 +1103,102 @@ mysql> SELECT p.full_name,
 +----------------+---------------------+-----------+----------------+
 9 rows in set (0.000 sec)
 
-mysql> -- Descriptions -----------------------------
-Query OK, 0 rows affected (0.000 sec)
+-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+--                     DESCRIPTION OF EASY LEVEL QUERIES
+-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-mysql> -- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 1:
+-- This query displays all passengers whose age is greater than 30 using the WHERE clause.
 
-mysql> --                     DESCRIPTION OF EASY LEVEL QUERIES
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 2:
+-- This query displays the names of trains that start from Hyderabad using the WHERE clause.
 
-mysql> -- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 3:
+-- This query displays all stations whose city names start with the letter 'V' using the LIKE operator.
 
-mysql> 
-mysql> -- EASY QUERY 1:
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 4:
+-- This query displays booking details where the fare is between ₹1000 and ₹2000 using the BETWEEN operator.
 
-mysql> -- This query displays all passengers whose age is greater than 30 using the WHERE clause.
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 5:
+-- This query displays all bookings whose booking status is 'Confirmed' using the WHERE clause.
 
-mysql> 
-mysql> -- EASY QUERY 2:
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 6:
+-- This query displays all AC coaches by filtering the coach type using the LIKE operator.
 
-mysql> -- This query displays the names of trains that start from Hyderabad using the WHERE clause.
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 7:
+-- This query displays passenger names arranged in descending order of age using the ORDER BY clause.
 
-mysql> 
-mysql> -- EASY QUERY 3:
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 8:
+-- This query displays all unique train source stations using the DISTINCT keyword.
 
-mysql> -- This query displays all stations whose city names start with the letter 'V' using the LIKE operator.
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 9:
+-- This query displays the first five train records using the LIMIT clause.
 
-mysql> 
-mysql> -- EASY QUERY 4:
-Query OK, 0 rows affected (0.000 sec)
+-- EASY QUERY 10:
+-- This query displays all payments that were made through the UPI payment method using the WHERE clause.
+-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+--               DESCRIPTION OF INTERMEDIATE LEVEL QUERIES
+-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-mysql> -- This query displays booking details where the fare is between ₹1000 and ₹2000 using the BETWEEN operator.
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 1:
+-- This query counts the total number of passengers available in the Passenger table using the COUNT() aggregate function.
 
-mysql> 
-mysql> -- EASY QUERY 5:
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 2:
+-- This query calculates the average booking fare using the AVG() aggregate function.
 
-mysql> -- This query displays all bookings whose booking status is 'Confirmed' using the WHERE clause.
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 3:
+-- This query displays the highest booking fare using the MAX() aggregate function.
 
-mysql> 
-mysql> -- EASY QUERY 6:
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 4:
+-- This query displays the lowest booking fare using the MIN() aggregate function.
 
-mysql> -- This query displays all AC coaches by filtering the coach type using the LIKE operator.
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 5:
+-- This query calculates the total revenue generated from successful payments using the SUM() aggregate function.
 
-mysql> 
-mysql> -- EASY QUERY 7:
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 6:
+-- This query counts the total number of bookings based on their booking status using the COUNT() function along with the GROUP BY clause.
 
-mysql> -- This query displays passenger names arranged in descending order of age using the ORDER BY clause.
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 7:
+-- This query counts the number of trains originating from each source station using GROUP BY and COUNT().
 
-mysql> 
-mysql> -- EASY QUERY 8:
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 8:
+-- This query displays coach types having more than one coach using GROUP BY and HAVING clauses.
 
-mysql> -- This query displays all unique train source stations using the DISTINCT keyword.
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 9:
+-- This query displays the total payment amount grouped according to payment status using the SUM() function and GROUP BY clause.
 
-mysql> 
-mysql> -- EASY QUERY 9:
-Query OK, 0 rows affected (0.000 sec)
+-- INTERMEDIATE QUERY 10:
+-- This query categorizes booking fares as High Fare, Medium Fare, or Low Fare using the CASE statement.
+-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+--                    DESCRIPTION OF HARD LEVEL QUERIES
+-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-mysql> -- This query displays the first five train records using the LIMIT clause.
-Query OK, 0 rows affected (0.000 sec)
+-- HARD QUERY 1:
+-- This query joins the Passenger, Booking, and Train tables to display passenger names along with the train they have booked using INNER JOIN.
 
-mysql> 
-mysql> -- EASY QUERY 10:
-Query OK, 0 rows affected (0.000 sec)
+-- HARD QUERY 2:
+-- This query joins the Booking and Ticket tables to display booking details together with the generated PNR number, coach number, and seat number.
 
-mysql> -- This query displays all payments that were made through the UPI payment method using the WHERE clause.
+-- HARD QUERY 3:
+-- This query joins the Passenger, Booking, Train, and Payment tables to display passenger names, train names, and payment amounts.
+
+-- HARD QUERY 4:
+-- This query uses LEFT JOIN to display all trains along with their coach types, including trains that may not have coach details.
+
+-- HARD QUERY 5:
+-- This query uses a subquery to display passengers whose booking fare is greater than the average booking fare.
+
+-- HARD QUERY 6:
+-- This query joins the Train and Coach tables and counts the number of coaches available for each train using GROUP BY and HAVING clauses.
+
+-- HARD QUERY 7:
+-- This query calculates the total revenue generated by each train by joining the Train, Booking, and Payment tables and applying the SUM() aggregate function.
+
+-- HARD QUERY 8:
+-- This query joins the Passenger, Booking, and Payment tables to display passengers whose payment status is 'Success'.
+
+-- HARD QUERY 9:
+-- This query uses LEFT JOIN and GROUP BY clauses to display the total number of bookings made for each train.
+
+-- HARD QUERY 10:
+-- This query joins the Passenger, Booking, Train, and Ticket tables to display confirmed bookings along with passenger names, train names, PNR numbers, and booking status.
