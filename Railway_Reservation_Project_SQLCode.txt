@@ -1,0 +1,1185 @@
+mysql> -- Railway Reservation System
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> CREATE DATABASE IF NOT EXISTS railway_reservation_db;
+Query OK, 1 row affected (0.007 sec)
+
+mysql> USE railway_reservation_db;
+Database changed
+mysql> 
+mysql> CREATE TABLE Passenger(
+    ->     passenger_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     full_name VARCHAR(100) NOT NULL,
+    ->     age INT,
+    ->     gender VARCHAR(10),
+    ->     phone VARCHAR(15),
+    ->     email VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.012 sec)
+
+mysql> 
+mysql> CREATE TABLE Train(
+    ->     train_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     train_number VARCHAR(10) UNIQUE,
+    ->     train_name VARCHAR(100),
+    ->     source VARCHAR(100),
+    ->     destination VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.008 sec)
+
+mysql> 
+mysql> CREATE TABLE Station(
+    ->     station_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     station_code VARCHAR(10) UNIQUE,
+    ->     station_name VARCHAR(100),
+    ->     city VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.006 sec)
+
+mysql> 
+mysql> CREATE TABLE Route(
+    ->     route_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     train_id INT,
+    ->     station_id INT,
+    ->     stop_no INT,
+    ->     arrival_time TIME,
+    ->     departure_time TIME,
+    ->     FOREIGN KEY(train_id) REFERENCES Train(train_id),
+    ->     FOREIGN KEY(station_id) REFERENCES Station(station_id)
+    -> );
+Query OK, 0 rows affected (0.010 sec)
+
+mysql> 
+mysql> CREATE TABLE Coach(
+    ->     coach_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     train_id INT,
+    ->     coach_type VARCHAR(20),
+    ->     total_seats INT,
+    ->     FOREIGN KEY(train_id) REFERENCES Train(train_id)
+    -> );
+Query OK, 0 rows affected (0.009 sec)
+
+mysql> 
+mysql> CREATE TABLE Booking(
+    ->     booking_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     passenger_id INT,
+    ->     train_id INT,
+    ->     journey_date DATE,
+    ->     booking_status VARCHAR(20),
+    ->     fare DECIMAL(10,2),
+    ->     FOREIGN KEY(passenger_id) REFERENCES Passenger(passenger_id),
+    ->     FOREIGN KEY(train_id) REFERENCES Train(train_id)
+    -> );
+Query OK, 0 rows affected (0.014 sec)
+
+mysql> 
+mysql> CREATE TABLE Ticket(
+    ->     ticket_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     booking_id INT,
+    ->     pnr VARCHAR(20) UNIQUE,
+    ->     coach_no VARCHAR(10),
+    ->     seat_no VARCHAR(10),
+    ->     FOREIGN KEY(booking_id) REFERENCES Booking(booking_id)
+    -> );
+Query OK, 0 rows affected (0.007 sec)
+
+mysql> 
+mysql> CREATE TABLE Payment(
+    ->     payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     booking_id INT,
+    ->     amount DECIMAL(10,2),
+    ->     payment_mode VARCHAR(30),
+    ->     payment_status VARCHAR(20),
+    ->     FOREIGN KEY(booking_id) REFERENCES Booking(booking_id)
+    -> );
+Query OK, 0 rows affected (0.006 sec)
+
+mysql> show tables;
++----------------------------------+
+| Tables_in_railway_reservation_db |
++----------------------------------+
+| Booking                          |
+| Coach                            |
+| Passenger                        |
+| Payment                          |
+| Route                            |
+| Station                          |
+| Ticket                           |
+| Train                            |
++----------------------------------+
+8 rows in set (0.001 sec)
+
+mysql> INSERT INTO Passenger (full_name, age, gender, phone, email) VALUES
+    -> ('Shah Rukh Khan',58,'Male','9876543210','srk@gmail.com'),
+    -> ('Salman Khan',57,'Male','9876543211','salman@gmail.com'),
+    -> ('Aamir Khan',59,'Male','9876543212','aamir@gmail.com'),
+    -> ('Hrithik Roshan',50,'Male','9876543213','hrithik@gmail.com'),
+    -> ('Ranbir Kapoor',42,'Male','9876543214','ranbir@gmail.com'),
+    -> ('Ranveer Singh',39,'Male','9876543215','ranveer@gmail.com'),
+    -> ('Rajinikanth',73,'Male','9876543216','rajini@gmail.com'),
+    -> ('Kamal Haasan',69,'Male','9876543217','kamal@gmail.com'),
+    -> ('Vijay',50,'Male','9876543218','vijay@gmail.com'),
+    -> ('Ajith Kumar',53,'Male','9876543219','ajith@gmail.com'),
+    -> ('Yash',39,'Male','9876543220','yash@gmail.com'),
+    -> ('Prabhas',45,'Male','9876543221','prabhas@gmail.com');
+Query OK, 12 rows affected (0.004 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM Passenger;
++--------------+----------------+------+--------+------------+-------------------+
+| passenger_id | full_name      | age  | gender | phone      | email             |
++--------------+----------------+------+--------+------------+-------------------+
+|            1 | Shah Rukh Khan |   58 | Male   | 9876543210 | srk@gmail.com     |
+|            2 | Salman Khan    |   57 | Male   | 9876543211 | salman@gmail.com  |
+|            3 | Aamir Khan     |   59 | Male   | 9876543212 | aamir@gmail.com   |
+|            4 | Hrithik Roshan |   50 | Male   | 9876543213 | hrithik@gmail.com |
+|            5 | Ranbir Kapoor  |   42 | Male   | 9876543214 | ranbir@gmail.com  |
+|            6 | Ranveer Singh  |   39 | Male   | 9876543215 | ranveer@gmail.com |
+|            7 | Rajinikanth    |   73 | Male   | 9876543216 | rajini@gmail.com  |
+|            8 | Kamal Haasan   |   69 | Male   | 9876543217 | kamal@gmail.com   |
+|            9 | Vijay          |   50 | Male   | 9876543218 | vijay@gmail.com   |
+|           10 | Ajith Kumar    |   53 | Male   | 9876543219 | ajith@gmail.com   |
+|           11 | Yash           |   39 | Male   | 9876543220 | yash@gmail.com    |
+|           12 | Prabhas        |   45 | Male   | 9876543221 | prabhas@gmail.com |
++--------------+----------------+------+--------+------------+-------------------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> INSERT INTO Train (train_number, train_name, source, destination) VALUES
+    -> ('12627','Karnataka Express','Bangalore','New Delhi'),
+    -> ('12760','Charminar Express','Hyderabad','Chennai'),
+    -> ('12841','Coromandel Express','Howrah','Chennai'),
+    -> ('12615','Grand Trunk Express','Chennai','New Delhi'),
+    -> ('12723','Telangana Express','Hyderabad','New Delhi'),
+    -> ('12839','Chennai Mail','Chennai','Kolkata'),
+    -> ('12603','Hyderabad Express','Hyderabad','Bangalore'),
+    -> ('12704','Falaknuma Express','Secunderabad','Howrah'),
+    -> ('12622','Tamil Nadu Express','New Delhi','Chennai'),
+    -> ('12864','SMVT Express','Bangalore','Visakhapatnam'),
+    -> ('12727','Godavari Express','Hyderabad','Visakhapatnam'),
+    -> ('12805','Janmabhoomi Express','Visakhapatnam','Secunderabad');
+Query OK, 12 rows affected (0.002 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM Train;
++----------+--------------+---------------------+---------------+---------------+
+| train_id | train_number | train_name          | source        | destination   |
++----------+--------------+---------------------+---------------+---------------+
+|        1 | 12627        | Karnataka Express   | Bangalore     | New Delhi     |
+|        2 | 12760        | Charminar Express   | Hyderabad     | Chennai       |
+|        3 | 12841        | Coromandel Express  | Howrah        | Chennai       |
+|        4 | 12615        | Grand Trunk Express | Chennai       | New Delhi     |
+|        5 | 12723        | Telangana Express   | Hyderabad     | New Delhi     |
+|        6 | 12839        | Chennai Mail        | Chennai       | Kolkata       |
+|        7 | 12603        | Hyderabad Express   | Hyderabad     | Bangalore     |
+|        8 | 12704        | Falaknuma Express   | Secunderabad  | Howrah        |
+|        9 | 12622        | Tamil Nadu Express  | New Delhi     | Chennai       |
+|       10 | 12864        | SMVT Express        | Bangalore     | Visakhapatnam |
+|       11 | 12727        | Godavari Express    | Hyderabad     | Visakhapatnam |
+|       12 | 12805        | Janmabhoomi Express | Visakhapatnam | Secunderabad  |
++----------+--------------+---------------------+---------------+---------------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> INSERT INTO Station (station_code, station_name, city) VALUES
+    -> ('SC','Secunderabad Junction','Hyderabad'),
+    -> ('BZA','Vijayawada Junction','Vijayawada'),
+    -> ('MAS','Chennai Central','Chennai'),
+    -> ('SBC','KSR Bengaluru','Bengaluru'),
+    -> ('NDLS','New Delhi','Delhi'),
+    -> ('HWH','Howrah Junction','Kolkata'),
+    -> ('VSKP','Visakhapatnam','Visakhapatnam'),
+    -> ('NGP','Nagpur Junction','Nagpur'),
+    -> ('BPL','Bhopal Junction','Bhopal'),
+    -> ('KZJ','Kazipet Junction','Warangal'),
+    -> ('TPTY','Tirupati','Tirupati'),
+    -> ('RJY','Rajahmundry','Rajahmundry');
+Query OK, 12 rows affected (0.003 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM Station;
++------------+--------------+-----------------------+---------------+
+| station_id | station_code | station_name          | city          |
++------------+--------------+-----------------------+---------------+
+|          1 | SC           | Secunderabad Junction | Hyderabad     |
+|          2 | BZA          | Vijayawada Junction   | Vijayawada    |
+|          3 | MAS          | Chennai Central       | Chennai       |
+|          4 | SBC          | KSR Bengaluru         | Bengaluru     |
+|          5 | NDLS         | New Delhi             | Delhi         |
+|          6 | HWH          | Howrah Junction       | Kolkata       |
+|          7 | VSKP         | Visakhapatnam         | Visakhapatnam |
+|          8 | NGP          | Nagpur Junction       | Nagpur        |
+|          9 | BPL          | Bhopal Junction       | Bhopal        |
+|         10 | KZJ          | Kazipet Junction      | Warangal      |
+|         11 | TPTY         | Tirupati              | Tirupati      |
+|         12 | RJY          | Rajahmundry           | Rajahmundry   |
++------------+--------------+-----------------------+---------------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> INSERT INTO Route (train_id, station_id, stop_no, arrival_time, departure_time) VALUES
+    -> (1,4,1,'06:00:00','06:15:00'),
+    -> (1,8,2,'14:20:00','14:30:00'),
+    -> (1,9,3,'20:10:00','20:20:00'),
+    -> (1,5,4,'08:00:00','08:15:00'),
+    -> (2,1,1,'07:00:00','07:20:00'),
+    -> (2,10,2,'09:40:00','09:50:00'),
+    -> (2,2,3,'12:00:00','12:10:00'),
+    -> (2,3,4,'18:00:00','18:15:00'),
+    -> (3,6,1,'05:30:00','05:45:00'),
+    -> (3,7,2,'15:10:00','15:20:00'),
+    -> (4,3,1,'08:30:00','08:45:00'),
+    -> (5,1,1,'09:15:00','09:30:00');
+Query OK, 12 rows affected (0.003 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM Route;
++----------+----------+------------+---------+--------------+----------------+
+| route_id | train_id | station_id | stop_no | arrival_time | departure_time |
++----------+----------+------------+---------+--------------+----------------+
+|        1 |        1 |          4 |       1 | 06:00:00     | 06:15:00       |
+|        2 |        1 |          8 |       2 | 14:20:00     | 14:30:00       |
+|        3 |        1 |          9 |       3 | 20:10:00     | 20:20:00       |
+|        4 |        1 |          5 |       4 | 08:00:00     | 08:15:00       |
+|        5 |        2 |          1 |       1 | 07:00:00     | 07:20:00       |
+|        6 |        2 |         10 |       2 | 09:40:00     | 09:50:00       |
+|        7 |        2 |          2 |       3 | 12:00:00     | 12:10:00       |
+|        8 |        2 |          3 |       4 | 18:00:00     | 18:15:00       |
+|        9 |        3 |          6 |       1 | 05:30:00     | 05:45:00       |
+|       10 |        3 |          7 |       2 | 15:10:00     | 15:20:00       |
+|       11 |        4 |          3 |       1 | 08:30:00     | 08:45:00       |
+|       12 |        5 |          1 |       1 | 09:15:00     | 09:30:00       |
++----------+----------+------------+---------+--------------+----------------+
+12 rows in set (0.000 sec)
+
+mysql> INSERT INTO Coach (train_id, coach_type, total_seats) VALUES
+    -> (1,'Sleeper',72),
+    -> (1,'AC 3 Tier',64),
+    -> (2,'Sleeper',72),
+    -> (2,'AC 2 Tier',48),
+    -> (3,'Chair Car',78),
+    -> (4,'Sleeper',72),
+    -> (5,'AC First',24),
+    -> (6,'Sleeper',72),
+    -> (7,'AC 3 Tier',64),
+    -> (8,'Chair Car',78),
+    -> (9,'AC 2 Tier',48),
+    -> (10,'Sleeper',72);
+Query OK, 12 rows affected (0.002 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM Coach;
++----------+----------+------------+-------------+
+| coach_id | train_id | coach_type | total_seats |
++----------+----------+------------+-------------+
+|        1 |        1 | Sleeper    |          72 |
+|        2 |        1 | AC 3 Tier  |          64 |
+|        3 |        2 | Sleeper    |          72 |
+|        4 |        2 | AC 2 Tier  |          48 |
+|        5 |        3 | Chair Car  |          78 |
+|        6 |        4 | Sleeper    |          72 |
+|        7 |        5 | AC First   |          24 |
+|        8 |        6 | Sleeper    |          72 |
+|        9 |        7 | AC 3 Tier  |          64 |
+|       10 |        8 | Chair Car  |          78 |
+|       11 |        9 | AC 2 Tier  |          48 |
+|       12 |       10 | Sleeper    |          72 |
++----------+----------+------------+-------------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> INSERT INTO Booking (passenger_id, train_id, journey_date, booking_status, fare) VALUES
+    -> (1,1,'2026-08-10','Confirmed',1850.00),
+    -> (2,2,'2026-08-11','Confirmed',920.00),
+    -> (3,3,'2026-08-12','Waiting',1450.00),
+    -> (4,4,'2026-08-13','Confirmed',2300.00),
+    -> (5,5,'2026-08-14','Cancelled',2100.00),
+    -> (6,6,'2026-08-15','Confirmed',1100.00),
+    -> (7,7,'2026-08-16','Confirmed',850.00),
+    -> (8,8,'2026-08-17','Waiting',1750.00),
+    -> (9,9,'2026-08-18','Confirmed',2550.00),
+    -> (10,10,'2026-08-19','Confirmed',1300.00),
+    -> (11,11,'2026-08-20','Confirmed',980.00),
+    -> (12,12,'2026-08-21','Confirmed',1550.00);
+Query OK, 12 rows affected (0.002 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM Booking;
++------------+--------------+----------+--------------+----------------+---------+
+| booking_id | passenger_id | train_id | journey_date | booking_status | fare    |
++------------+--------------+----------+--------------+----------------+---------+
+|          1 |            1 |        1 | 2026-08-10   | Confirmed      | 1850.00 |
+|          2 |            2 |        2 | 2026-08-11   | Confirmed      |  920.00 |
+|          3 |            3 |        3 | 2026-08-12   | Waiting        | 1450.00 |
+|          4 |            4 |        4 | 2026-08-13   | Confirmed      | 2300.00 |
+|          5 |            5 |        5 | 2026-08-14   | Cancelled      | 2100.00 |
+|          6 |            6 |        6 | 2026-08-15   | Confirmed      | 1100.00 |
+|          7 |            7 |        7 | 2026-08-16   | Confirmed      |  850.00 |
+|          8 |            8 |        8 | 2026-08-17   | Waiting        | 1750.00 |
+|          9 |            9 |        9 | 2026-08-18   | Confirmed      | 2550.00 |
+|         10 |           10 |       10 | 2026-08-19   | Confirmed      | 1300.00 |
+|         11 |           11 |       11 | 2026-08-20   | Confirmed      |  980.00 |
+|         12 |           12 |       12 | 2026-08-21   | Confirmed      | 1550.00 |
++------------+--------------+----------+--------------+----------------+---------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> INSERT INTO Ticket (booking_id, pnr, coach_no, seat_no) VALUES
+    -> (1,'PNR100001','S1','23'),
+    -> (2,'PNR100002','A1','15'),
+    -> (3,'PNR100003','S2','40'),
+    -> (4,'PNR100004','B1','08'),
+    -> (5,'PNR100005','S3','55'),
+    -> (6,'PNR100006','C1','18'),
+    -> (7,'PNR100007','A2','30'),
+    -> (8,'PNR100008','S4','61'),
+    -> (9,'PNR100009','H1','03'),
+    -> (10,'PNR100010','D1','21'),
+    -> (11,'PNR100011','A3','12'),
+    -> (12,'PNR100012','S5','44');
+Query OK, 12 rows affected (0.003 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM Ticket;
++-----------+------------+-----------+----------+---------+
+| ticket_id | booking_id | pnr       | coach_no | seat_no |
++-----------+------------+-----------+----------+---------+
+|         1 |          1 | PNR100001 | S1       | 23      |
+|         2 |          2 | PNR100002 | A1       | 15      |
+|         3 |          3 | PNR100003 | S2       | 40      |
+|         4 |          4 | PNR100004 | B1       | 08      |
+|         5 |          5 | PNR100005 | S3       | 55      |
+|         6 |          6 | PNR100006 | C1       | 18      |
+|         7 |          7 | PNR100007 | A2       | 30      |
+|         8 |          8 | PNR100008 | S4       | 61      |
+|         9 |          9 | PNR100009 | H1       | 03      |
+|        10 |         10 | PNR100010 | D1       | 21      |
+|        11 |         11 | PNR100011 | A3       | 12      |
+|        12 |         12 | PNR100012 | S5       | 44      |
++-----------+------------+-----------+----------+---------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> INSERT INTO Payment (booking_id, amount, payment_mode, payment_status) VALUES
+    -> (1,1850.00,'UPI','Success'),
+    -> (2,920.00,'Credit Card','Success'),
+    -> (3,1450.00,'Net Banking','Pending'),
+    -> (4,2300.00,'Debit Card','Success'),
+    -> (5,2100.00,'UPI','Refunded'),
+    -> (6,1100.00,'Cash','Success'),
+    -> (7,850.00,'UPI','Success'),
+    -> (8,1750.00,'Credit Card','Pending'),
+    -> (9,2550.00,'Net Banking','Success'),
+    -> (10,1300.00,'Debit Card','Success'),
+    -> (11,980.00,'UPI','Success'),
+    -> (12,1550.00,'Credit Card','Success');
+Query OK, 12 rows affected (0.001 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM Payment;
++------------+------------+---------+--------------+----------------+
+| payment_id | booking_id | amount  | payment_mode | payment_status |
++------------+------------+---------+--------------+----------------+
+|          1 |          1 | 1850.00 | UPI          | Success        |
+|          2 |          2 |  920.00 | Credit Card  | Success        |
+|          3 |          3 | 1450.00 | Net Banking  | Pending        |
+|          4 |          4 | 2300.00 | Debit Card   | Success        |
+|          5 |          5 | 2100.00 | UPI          | Refunded       |
+|          6 |          6 | 1100.00 | Cash         | Success        |
+|          7 |          7 |  850.00 | UPI          | Success        |
+|          8 |          8 | 1750.00 | Credit Card  | Pending        |
+|          9 |          9 | 2550.00 | Net Banking  | Success        |
+|         10 |         10 | 1300.00 | Debit Card   | Success        |
+|         11 |         11 |  980.00 | UPI          | Success        |
+|         12 |         12 | 1550.00 | Credit Card  | Success        |
++------------+------------+---------+--------------+----------------+
+12 rows in set (0.000 sec)
+
+mysql> -- EASY QUERIES ------------------
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- EASY QUERY 1
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display all passengers above 30 years of age.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT * FROM Passenger
+    -> WHERE age > 30;
++--------------+----------------+------+--------+------------+-------------------+
+| passenger_id | full_name      | age  | gender | phone      | email             |
++--------------+----------------+------+--------+------------+-------------------+
+|            1 | Shah Rukh Khan |   58 | Male   | 9876543210 | srk@gmail.com     |
+|            2 | Salman Khan    |   57 | Male   | 9876543211 | salman@gmail.com  |
+|            3 | Aamir Khan     |   59 | Male   | 9876543212 | aamir@gmail.com   |
+|            4 | Hrithik Roshan |   50 | Male   | 9876543213 | hrithik@gmail.com |
+|            5 | Ranbir Kapoor  |   42 | Male   | 9876543214 | ranbir@gmail.com  |
+|            6 | Ranveer Singh  |   39 | Male   | 9876543215 | ranveer@gmail.com |
+|            7 | Rajinikanth    |   73 | Male   | 9876543216 | rajini@gmail.com  |
+|            8 | Kamal Haasan   |   69 | Male   | 9876543217 | kamal@gmail.com   |
+|            9 | Vijay          |   50 | Male   | 9876543218 | vijay@gmail.com   |
+|           10 | Ajith Kumar    |   53 | Male   | 9876543219 | ajith@gmail.com   |
+|           11 | Yash           |   39 | Male   | 9876543220 | yash@gmail.com    |
+|           12 | Prabhas        |   45 | Male   | 9876543221 | prabhas@gmail.com |
++--------------+----------------+------+--------+------------+-------------------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 2
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display all trains starting from Hyderabad.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT train_name, source, destination
+    -> FROM Train
+    -> WHERE source='Hyderabad';
++-------------------+-----------+---------------+
+| train_name        | source    | destination   |
++-------------------+-----------+---------------+
+| Charminar Express | Hyderabad | Chennai       |
+| Telangana Express | Hyderabad | New Delhi     |
+| Hyderabad Express | Hyderabad | Bangalore     |
+| Godavari Express  | Hyderabad | Visakhapatnam |
++-------------------+-----------+---------------+
+4 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 3
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display all stations located in cities starting with 'V'.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT station_name, city
+    -> FROM Station
+    -> WHERE city LIKE 'V%';
++---------------------+---------------+
+| station_name        | city          |
++---------------------+---------------+
+| Vijayawada Junction | Vijayawada    |
+| Visakhapatnam       | Visakhapatnam |
++---------------------+---------------+
+2 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 4
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display bookings with fare between 1000 and 2000.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT booking_id, passenger_id, fare
+    -> FROM Booking
+    -> WHERE fare BETWEEN 1000 AND 2000;
++------------+--------------+---------+
+| booking_id | passenger_id | fare    |
++------------+--------------+---------+
+|          1 |            1 | 1850.00 |
+|          3 |            3 | 1450.00 |
+|          6 |            6 | 1100.00 |
+|          8 |            8 | 1750.00 |
+|         10 |           10 | 1300.00 |
+|         12 |           12 | 1550.00 |
++------------+--------------+---------+
+6 rows in set (0.002 sec)
+
+mysql> 
+mysql> -- EASY QUERY 5
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display confirmed bookings.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT booking_id, booking_status
+    -> FROM Booking
+    -> WHERE booking_status='Confirmed';
++------------+----------------+
+| booking_id | booking_status |
++------------+----------------+
+|          1 | Confirmed      |
+|          2 | Confirmed      |
+|          4 | Confirmed      |
+|          6 | Confirmed      |
+|          7 | Confirmed      |
+|          9 | Confirmed      |
+|         10 | Confirmed      |
+|         11 | Confirmed      |
+|         12 | Confirmed      |
++------------+----------------+
+9 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 6
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display all AC coaches.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT *
+    -> FROM Coach
+    -> WHERE coach_type LIKE 'AC%';
++----------+----------+------------+-------------+
+| coach_id | train_id | coach_type | total_seats |
++----------+----------+------------+-------------+
+|        2 |        1 | AC 3 Tier  |          64 |
+|        4 |        2 | AC 2 Tier  |          48 |
+|        7 |        5 | AC First   |          24 |
+|        9 |        7 | AC 3 Tier  |          64 |
+|       11 |        9 | AC 2 Tier  |          48 |
++----------+----------+------------+-------------+
+5 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 7
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display passengers ordered by age.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT full_name, age
+    -> FROM Passenger
+    -> ORDER BY age DESC;
++----------------+------+
+| full_name      | age  |
++----------------+------+
+| Rajinikanth    |   73 |
+| Kamal Haasan   |   69 |
+| Aamir Khan     |   59 |
+| Shah Rukh Khan |   58 |
+| Salman Khan    |   57 |
+| Ajith Kumar    |   53 |
+| Hrithik Roshan |   50 |
+| Vijay          |   50 |
+| Prabhas        |   45 |
+| Ranbir Kapoor  |   42 |
+| Ranveer Singh  |   39 |
+| Yash           |   39 |
++----------------+------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 8
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display distinct train sources.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT DISTINCT source
+    -> FROM Train;
++---------------+
+| source        |
++---------------+
+| Bangalore     |
+| Hyderabad     |
+| Howrah        |
+| Chennai       |
+| Secunderabad  |
+| New Delhi     |
+| Visakhapatnam |
++---------------+
+7 rows in set (0.001 sec)
+
+mysql> 
+mysql> -- EASY QUERY 9
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display first five trains.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT *
+    -> FROM Train
+    -> LIMIT 5;
++----------+--------------+---------------------+-----------+-------------+
+| train_id | train_number | train_name          | source    | destination |
++----------+--------------+---------------------+-----------+-------------+
+|        1 | 12627        | Karnataka Express   | Bangalore | New Delhi   |
+|        2 | 12760        | Charminar Express   | Hyderabad | Chennai     |
+|        3 | 12841        | Coromandel Express  | Howrah    | Chennai     |
+|        4 | 12615        | Grand Trunk Express | Chennai   | New Delhi   |
+|        5 | 12723        | Telangana Express   | Hyderabad | New Delhi   |
++----------+--------------+---------------------+-----------+-------------+
+5 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 10
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display payments made using UPI.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT booking_id, amount
+    -> FROM Payment
+    -> WHERE payment_mode='UPI';
++------------+---------+
+| booking_id | amount  |
++------------+---------+
+|          1 | 1850.00 |
+|          5 | 2100.00 |
+|          7 |  850.00 |
+|         11 |  980.00 |
++------------+---------+
+4 rows in set (0.000 sec)
+
+mysql> -- INTERMEDIATE QUERIES ------------
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- INTERMEDIATE QUERY 1
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Count total passengers.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT COUNT(*) AS total_passengers
+    -> FROM Passenger;
++------------------+
+| total_passengers |
++------------------+
+|               12 |
++------------------+
+1 row in set (0.002 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 2
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Calculate the average booking fare.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT AVG(fare) AS average_fare
+    -> FROM Booking;
++--------------+
+| average_fare |
++--------------+
+|  1558.333333 |
++--------------+
+1 row in set (0.001 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 3
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Find the highest booking fare.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT MAX(fare) AS highest_fare
+    -> FROM Booking;
++--------------+
+| highest_fare |
++--------------+
+|      2550.00 |
++--------------+
+1 row in set (0.001 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 4
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Find the lowest booking fare.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT MIN(fare) AS lowest_fare
+    -> FROM Booking;
++-------------+
+| lowest_fare |
++-------------+
+|      850.00 |
++-------------+
+1 row in set (0.000 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 5
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Calculate the total revenue from successful payments.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT SUM(amount) AS total_revenue
+    -> FROM Payment
+    -> WHERE payment_status='Success';
++---------------+
+| total_revenue |
++---------------+
+|      13400.00 |
++---------------+
+1 row in set (0.000 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 6
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Count bookings by booking status.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT booking_status, COUNT(*) AS total_bookings
+    -> FROM Booking
+    -> GROUP BY booking_status;
++----------------+----------------+
+| booking_status | total_bookings |
++----------------+----------------+
+| Confirmed      |              9 |
+| Waiting        |              2 |
+| Cancelled      |              1 |
++----------------+----------------+
+3 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 7
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Count trains originating from each source station.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT source, COUNT(*) AS total_trains
+    -> FROM Train
+    -> GROUP BY source;
++---------------+--------------+
+| source        | total_trains |
++---------------+--------------+
+| Bangalore     |            2 |
+| Hyderabad     |            4 |
+| Howrah        |            1 |
+| Chennai       |            2 |
+| Secunderabad  |            1 |
+| New Delhi     |            1 |
+| Visakhapatnam |            1 |
++---------------+--------------+
+7 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 8
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display coach types having more than one coach.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT coach_type, COUNT(*) AS total_coaches
+    -> FROM Coach
+    -> GROUP BY coach_type
+    -> HAVING COUNT(*) > 1;
++------------+---------------+
+| coach_type | total_coaches |
++------------+---------------+
+| Sleeper    |             5 |
+| AC 3 Tier  |             2 |
+| AC 2 Tier  |             2 |
+| Chair Car  |             2 |
++------------+---------------+
+4 rows in set (0.001 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 9
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Show payment status with total amount collected.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT payment_status, SUM(amount) AS total_amount
+    -> FROM Payment
+    -> GROUP BY payment_status;
++----------------+--------------+
+| payment_status | total_amount |
++----------------+--------------+
+| Success        |     13400.00 |
+| Pending        |      3200.00 |
+| Refunded       |      2100.00 |
++----------------+--------------+
+3 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- INTERMEDIATE QUERY 10
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Categorize booking fares using CASE.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT booking_id,
+    -> fare,
+    -> CASE
+    ->     WHEN fare >= 2000 THEN 'High Fare'
+    ->     WHEN fare BETWEEN 1000 AND 1999 THEN 'Medium Fare'
+    ->     ELSE 'Low Fare'
+    -> END AS fare_category
+    -> FROM Booking;
++------------+---------+---------------+
+| booking_id | fare    | fare_category |
++------------+---------+---------------+
+|          1 | 1850.00 | Medium Fare   |
+|          2 |  920.00 | Low Fare      |
+|          3 | 1450.00 | Medium Fare   |
+|          4 | 2300.00 | High Fare     |
+|          5 | 2100.00 | High Fare     |
+|          6 | 1100.00 | Medium Fare   |
+|          7 |  850.00 | Low Fare      |
+|          8 | 1750.00 | Medium Fare   |
+|          9 | 2550.00 | High Fare     |
+|         10 | 1300.00 | Medium Fare   |
+|         11 |  980.00 | Low Fare      |
+|         12 | 1550.00 | Medium Fare   |
++------------+---------+---------------+
+12 rows in set (0.000 sec)
+
+mysql> -- HARD QUERY 1
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display passenger names along with the train they booked.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT p.full_name, t.train_name
+    -> FROM Passenger p
+    -> INNER JOIN Booking b ON p.passenger_id = b.passenger_id
+    -> INNER JOIN Train t ON b.train_id = t.train_id;
++----------------+---------------------+
+| full_name      | train_name          |
++----------------+---------------------+
+| Shah Rukh Khan | Karnataka Express   |
+| Salman Khan    | Charminar Express   |
+| Aamir Khan     | Coromandel Express  |
+| Hrithik Roshan | Grand Trunk Express |
+| Ranbir Kapoor  | Telangana Express   |
+| Ranveer Singh  | Chennai Mail        |
+| Rajinikanth    | Hyderabad Express   |
+| Kamal Haasan   | Falaknuma Express   |
+| Vijay          | Tamil Nadu Express  |
+| Ajith Kumar    | SMVT Express        |
+| Yash           | Godavari Express    |
+| Prabhas        | Janmabhoomi Express |
++----------------+---------------------+
+12 rows in set (0.001 sec)
+
+mysql> 
+mysql> -- HARD QUERY 2
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display booking details with ticket information.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT b.booking_id, t.pnr, t.coach_no, t.seat_no
+    -> FROM Booking b
+    -> INNER JOIN Ticket t ON b.booking_id = t.booking_id;
++------------+-----------+----------+---------+
+| booking_id | pnr       | coach_no | seat_no |
++------------+-----------+----------+---------+
+|          1 | PNR100001 | S1       | 23      |
+|          2 | PNR100002 | A1       | 15      |
+|          3 | PNR100003 | S2       | 40      |
+|          4 | PNR100004 | B1       | 08      |
+|          5 | PNR100005 | S3       | 55      |
+|          6 | PNR100006 | C1       | 18      |
+|          7 | PNR100007 | A2       | 30      |
+|          8 | PNR100008 | S4       | 61      |
+|          9 | PNR100009 | H1       | 03      |
+|         10 | PNR100010 | D1       | 21      |
+|         11 | PNR100011 | A3       | 12      |
+|         12 | PNR100012 | S5       | 44      |
++------------+-----------+----------+---------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- HARD QUERY 3
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display passenger, train and payment amount.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT p.full_name, tr.train_name, pay.amount
+    -> FROM Passenger p
+    -> JOIN Booking b ON p.passenger_id = b.passenger_id
+    -> JOIN Train tr ON b.train_id = tr.train_id
+    -> JOIN Payment pay ON b.booking_id = pay.booking_id;
++----------------+---------------------+---------+
+| full_name      | train_name          | amount  |
++----------------+---------------------+---------+
+| Shah Rukh Khan | Karnataka Express   | 1850.00 |
+| Salman Khan    | Charminar Express   |  920.00 |
+| Aamir Khan     | Coromandel Express  | 1450.00 |
+| Hrithik Roshan | Grand Trunk Express | 2300.00 |
+| Ranbir Kapoor  | Telangana Express   | 2100.00 |
+| Ranveer Singh  | Chennai Mail        | 1100.00 |
+| Rajinikanth    | Hyderabad Express   |  850.00 |
+| Kamal Haasan   | Falaknuma Express   | 1750.00 |
+| Vijay          | Tamil Nadu Express  | 2550.00 |
+| Ajith Kumar    | SMVT Express        | 1300.00 |
+| Yash           | Godavari Express    |  980.00 |
+| Prabhas        | Janmabhoomi Express | 1550.00 |
++----------------+---------------------+---------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- HARD QUERY 4
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display all trains and their coach types.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT tr.train_name, c.coach_type
+    -> FROM Train tr
+    -> LEFT JOIN Coach c ON tr.train_id = c.train_id;
++---------------------+------------+
+| train_name          | coach_type |
++---------------------+------------+
+| Karnataka Express   | Sleeper    |
+| Karnataka Express   | AC 3 Tier  |
+| Charminar Express   | Sleeper    |
+| Charminar Express   | AC 2 Tier  |
+| Coromandel Express  | Chair Car  |
+| Grand Trunk Express | Sleeper    |
+| Telangana Express   | AC First   |
+| Chennai Mail        | Sleeper    |
+| Hyderabad Express   | AC 3 Tier  |
+| Falaknuma Express   | Chair Car  |
+| Tamil Nadu Express  | AC 2 Tier  |
+| SMVT Express        | Sleeper    |
+| Godavari Express    | NULL       |
+| Janmabhoomi Express | NULL       |
++---------------------+------------+
+14 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- HARD QUERY 5
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display passengers whose fare is greater than the average fare.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT full_name
+    -> FROM Passenger
+    -> WHERE passenger_id IN (
+    ->     SELECT passenger_id
+    ->     FROM Booking
+    ->     WHERE fare > (SELECT AVG(fare) FROM Booking)
+    -> );
++----------------+
+| full_name      |
++----------------+
+| Shah Rukh Khan |
+| Hrithik Roshan |
+| Ranbir Kapoor  |
+| Kamal Haasan   |
+| Vijay          |
++----------------+
+5 rows in set (0.001 sec)
+
+mysql> 
+mysql> -- HARD QUERY 6
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display trains having more than one coach.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT tr.train_name, COUNT(c.coach_id) AS total_coaches
+    -> FROM Train tr
+    -> JOIN Coach c ON tr.train_id = c.train_id
+    -> GROUP BY tr.train_name
+    -> HAVING COUNT(c.coach_id) > 1;
++-------------------+---------------+
+| train_name        | total_coaches |
++-------------------+---------------+
+| Karnataka Express |             2 |
+| Charminar Express |             2 |
++-------------------+---------------+
+2 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- HARD QUERY 7
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display total revenue generated by each train.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT tr.train_name, SUM(pay.amount) AS total_revenue
+    -> FROM Train tr
+    -> JOIN Booking b ON tr.train_id = b.train_id
+    -> JOIN Payment pay ON b.booking_id = pay.booking_id
+    -> WHERE pay.payment_status='Success'
+    -> GROUP BY tr.train_name;
++---------------------+---------------+
+| train_name          | total_revenue |
++---------------------+---------------+
+| Karnataka Express   |       1850.00 |
+| Charminar Express   |        920.00 |
+| Grand Trunk Express |       2300.00 |
+| Chennai Mail        |       1100.00 |
+| Hyderabad Express   |        850.00 |
+| Tamil Nadu Express  |       2550.00 |
+| SMVT Express        |       1300.00 |
+| Godavari Express    |        980.00 |
+| Janmabhoomi Express |       1550.00 |
++---------------------+---------------+
+9 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- HARD QUERY 8
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display passengers who made successful payments.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT p.full_name, pay.payment_mode
+    -> FROM Passenger p
+    -> JOIN Booking b ON p.passenger_id=b.passenger_id
+    -> JOIN Payment pay ON b.booking_id=pay.booking_id
+    -> WHERE pay.payment_status='Success';
++----------------+--------------+
+| full_name      | payment_mode |
++----------------+--------------+
+| Shah Rukh Khan | UPI          |
+| Salman Khan    | Credit Card  |
+| Hrithik Roshan | Debit Card   |
+| Ranveer Singh  | Cash         |
+| Rajinikanth    | UPI          |
+| Vijay          | Net Banking  |
+| Ajith Kumar    | Debit Card   |
+| Yash           | UPI          |
+| Prabhas        | Credit Card  |
++----------------+--------------+
+9 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- HARD QUERY 9
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display booking count for each train.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT tr.train_name, COUNT(b.booking_id) AS total_bookings
+    -> FROM Train tr
+    -> LEFT JOIN Booking b ON tr.train_id=b.train_id
+    -> GROUP BY tr.train_name;
++---------------------+----------------+
+| train_name          | total_bookings |
++---------------------+----------------+
+| Karnataka Express   |              1 |
+| Charminar Express   |              1 |
+| Coromandel Express  |              1 |
+| Grand Trunk Express |              1 |
+| Telangana Express   |              1 |
+| Chennai Mail        |              1 |
+| Hyderabad Express   |              1 |
+| Falaknuma Express   |              1 |
+| Tamil Nadu Express  |              1 |
+| SMVT Express        |              1 |
+| Godavari Express    |              1 |
+| Janmabhoomi Express |              1 |
++---------------------+----------------+
+12 rows in set (0.000 sec)
+
+mysql> 
+mysql> -- HARD QUERY 10
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- Display confirmed bookings with passenger, train and PNR.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> SELECT p.full_name,
+    ->        tr.train_name,
+    ->        tk.pnr,
+    ->        b.booking_status
+    -> FROM Passenger p
+    -> JOIN Booking b ON p.passenger_id=b.passenger_id
+    -> JOIN Train tr ON b.train_id=tr.train_id
+    -> JOIN Ticket tk ON b.booking_id=tk.booking_id
+    -> WHERE b.booking_status='Confirmed';
++----------------+---------------------+-----------+----------------+
+| full_name      | train_name          | pnr       | booking_status |
++----------------+---------------------+-----------+----------------+
+| Shah Rukh Khan | Karnataka Express   | PNR100001 | Confirmed      |
+| Salman Khan    | Charminar Express   | PNR100002 | Confirmed      |
+| Hrithik Roshan | Grand Trunk Express | PNR100004 | Confirmed      |
+| Ranveer Singh  | Chennai Mail        | PNR100006 | Confirmed      |
+| Rajinikanth    | Hyderabad Express   | PNR100007 | Confirmed      |
+| Vijay          | Tamil Nadu Express  | PNR100009 | Confirmed      |
+| Ajith Kumar    | SMVT Express        | PNR100010 | Confirmed      |
+| Yash           | Godavari Express    | PNR100011 | Confirmed      |
+| Prabhas        | Janmabhoomi Express | PNR100012 | Confirmed      |
++----------------+---------------------+-----------+----------------+
+9 rows in set (0.000 sec)
+
+mysql> -- Descriptions -----------------------------
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> --                     DESCRIPTION OF EASY LEVEL QUERIES
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 1:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays all passengers whose age is greater than 30 using the WHERE clause.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 2:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays the names of trains that start from Hyderabad using the WHERE clause.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 3:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays all stations whose city names start with the letter 'V' using the LIKE operator.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 4:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays booking details where the fare is between ₹1000 and ₹2000 using the BETWEEN operator.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 5:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays all bookings whose booking status is 'Confirmed' using the WHERE clause.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 6:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays all AC coaches by filtering the coach type using the LIKE operator.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 7:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays passenger names arranged in descending order of age using the ORDER BY clause.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 8:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays all unique train source stations using the DISTINCT keyword.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 9:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays the first five train records using the LIMIT clause.
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> 
+mysql> -- EASY QUERY 10:
+Query OK, 0 rows affected (0.000 sec)
+
+mysql> -- This query displays all payments that were made through the UPI payment method using the WHERE clause.
