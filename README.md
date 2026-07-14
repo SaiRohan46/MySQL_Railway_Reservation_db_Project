@@ -59,6 +59,6 @@ This project demonstrates:
 | **Kavya**             | Developed the Passenger, Train, Station, Route, Booking, Ticket, Coach, and Payment modules, inserted realistic sample data, implemented database relationships, assisted in SQL query development, validated query outputs,ensuring database normalization and data integrity, coordinating team activities and contributed to debugging and successful integration of all project modules.                                                                                                             |
 | **Abhinav**           | Designed the Entity-Relationship (ER) Diagram, verified relationships between database entities, reviewed SQL scripts for consistency, tested database integrity, assisted in debugging and validation, and supported the preparation of the final project report and presentation.                                                                                                                                                                  |
 
-Conclusion
+## Conclusion
 
 The Railway Reservation System successfully demonstrates the practical implementation of a relational database using MySQL. The project provides an efficient solution for managing passengers, trains, stations, routes, coaches, bookings, tickets, and payments through a well-structured and normalized database design. By implementing primary and foreign key relationships, the system ensures data integrity, minimizes redundancy, and maintains consistency across all interconnected tables.
