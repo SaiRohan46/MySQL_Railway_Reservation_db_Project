@@ -50,3 +50,9 @@ This project demonstrates:
 - Aggregate functions
 - Grouping and filtering
 - Database normalization
+
+| **Team Member** | **Contribution**                                                                                                                                                                          |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Rohan**       | Designed the database schema, created SQL tables, established primary and foreign key relationships, and implemented the Railway Reservation System database structure.                   |
+| **Kavya**       | Inserted sample data, developed Easy and Intermediate SQL queries, performed database testing, and validated data consistency across all tables.                                          |
+| **Abhinav**     | Developed advanced SQL queries using JOINs, aggregate functions, and subqueries, designed the ER diagram, prepared project documentation, and assisted in query optimization and testing. |
